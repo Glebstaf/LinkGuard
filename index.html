@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkGuard - Защита от фишинга и мошенничества</title>
+    <meta name="description" content="LinkGuard v2.1 - Бесплатная защита от фишинговых сайтов. Проверка ссылок, анализатор паролей, защита в реальном времени.">
+    <meta name="keywords" content="антифишинг, защита от мошенников, проверка ссылок, безопасность, LinkGuard, фишинг защита">
+    
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="LinkGuard - Защита от фишинга">
+    <meta property="og:description" content="Бесплатная защита от фишинговых сайтов и мошенников">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/0f172a/3b82f6?text=LinkGuard+v2.1">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .animated-bg::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 1%, transparent 71%);
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Glowing Button */
+        .glow-button {
+            position: relative;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 16px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+        }
+        
+        .glow-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
+        }
+        
+        /* Feature Cards */
+        .feature-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 24px;
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Stats Counter Animation */
+        .counter {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Floating Icons */
+        .float-icon {
+            position: absolute;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+            font-size: 40px;
+            color: #3b82f6;
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateX(-100px) translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateX(calc(100vw + 100px)) translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+        
+        .pulse {
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+    
+    <!-- Floating Icons -->
+    <i class="fas fa-shield-alt float-icon" style="top: 10%; left: 5%; animation-delay: 0s;"></i>
+    <i class="fas fa-lock float-icon" style="top: 50%; left: 10%; animation-delay: 5s;"></i>
+    <i class="fas fa-check-circle float-icon" style="top: 80%; left: 15%; animation-delay: 10s;"></i>
+    <i class="fas fa-user-shield float-icon" style="top: 20%; right: 10%; animation-delay: 15s;"></i>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full backdrop-blur-md bg-slate-900/70 border-b border-slate-700 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-blue-500 text-2xl"></i>
+                <h1 class="text-xl font-bold">LinkGuard <span class="text-xs bg-blue-600 px-2 py-0.5 rounded text-white">v2.1</span></h1>
+            </div>
+            <div class="flex gap-4">
+                <a href="#features" class="text-slate-300 hover:text-white transition">Возможности</a>
+                <a href="#how-it-works" class="text-slate-300 hover:text-white transition">Как работает</a>
+                <a href="#stats" class="text-slate-300 hover:text-white transition">Статистика</a>
+                <a href="#download" class="text-slate-300 hover:text-white transition">Скачать</a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center px-6 pt-20">
+        <div class="container mx-auto text-center">
+            <div class="mb-8 pulse inline-block">
+                <i class="fa-solid fa-shield-halved text-8xl text-blue-500"></i>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                LinkGuard
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto">
+                Мощная защита от фишинга и мошеннических сайтов. 
+                Проверяйте ссылки мгновенно, защищайте свои данные.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <button onclick="startOnline()" class="glow-button">
+                    <i class="fa-solid fa-play mr-2"></i>
+                    Запустить онлайн
+                </button>
+                <a href="#download" class="px-8 py-4 bg-slate-700 hover:bg-slate-600 text-white font-semibold rounded-xl transition flex items-center justify-center">
+                    <i class="fa-solid fa-download mr-2"></i>
+                    Скачать для Windows
+                </a>
+            </div>
+            
+            <!-- Quick Demo -->
+            <div class="max-w-2xl mx-auto bg-slate-800/50 backdrop-blur rounded-2xl p-6 border border-slate-700">
+                <p class="text-sm text-slate-400 mb-3">Попробуйте прямо сейчас:</p>
+                <div class="flex gap-2">
+                    <input type="text" id="demo-input" placeholder="Введите ссылку для проверки..." 
+                           class="flex-1 bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500">
+                    <button onclick="checkDemo()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition">
+                        Проверить
+                    </button>
+                </div>
+                <div id="demo-result" class="mt-4 hidden"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Возможности защиты</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="text-blue-500 text-3xl mb-4"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Проверка в реальном времени</h3>
+                    <p class="text-slate-400">Мгновенный анализ каждой скопированной ссылки с использованием алгоритма Левенштейна</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="text-green-500 text-3xl mb-4"><i class="fa-solid fa-database"></i></div>
+                    <h3 class="text-xl font-bold mb-2">База 100+ сайтов</h3>
+                    <p class="text-slate-400">Встроенный белый список банков, госуслуг, магазинов и популярных сервисов</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="text-yellow-500 text-3xl mb-4"><i class="fa-solid fa-key"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Анализатор паролей</h3>
+                    <p class="text-slate-400">Проверка надежности паролей и расчет времени взлома методом перебора</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="feature-card">
+                    <div class="text-purple-500 text-3xl mb-4"><i class="fa-solid fa-bell"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Toast-уведомления</h3>
+                    <p class="text-slate-400">Элегантные уведомления в стиле Windows 10 о результатах проверки</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="feature-card">
+                    <div class="text-red-500 text-3xl mb-4"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <h3 class="text-xl font-bold mb-2">Антифишинг</h3>
+                    <p class="text-slate-400">Обнаружение поддельных сайтов, имитирующих известные бренды</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="feature-card">
+                    <div class="text-cyan-500 text-3xl mb-4"><i class="fa-solid fa-terminal"></i></div>
+                    <h3 class="text-xl font-bold mb-2">CLI Менеджер</h3>
+                    <p class="text-slate-400">Управление через командную строку для продвинутых пользователей</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 px-6 bg-slate-900/50">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12">Как это работает</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-col gap-8">
+                    <!-- Step 1 -->
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">1</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Копируете ссылку</h3>
+                            <p class="text-slate-400">Выделите любую ссылку и скопируйте её в буфер обмена (Ctrl+C)</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">2</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">LinkGuard анализирует</h3>
+                            <p class="text-slate-400">Программа автоматически проверяет домен на совпадение с базой фишинговых сайтов</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">3</div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-2">Получаете уведомление</h3>
+                            <p class="text-slate-400">Мгновенное оповещение о безопасности или опасности сайта</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section id="stats" class="py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-12">Статистика защиты</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="counter" data-target="100">0</div>
+                    <p class="text-slate-400 mt-2">Сайтов в базе</p>
+                </div>
+                <div>
+                    <div class="counter" data-target="1000">0</div>
+                    <p class="text-slate-400 mt-2">Проверок в день</p>
+                </div>
+                <div>
+                    <div class="counter" data-target="99">0</div>
+                    <p class="text-slate-400 mt-2">% точность</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Download Section -->
+    <section id="download" class="py-20 px-6 bg-slate-900/50">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8">Начните использовать LinkGuard</h2>
+            <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto">
+                Выберите удобный способ использования программы
+            </p>
+            
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Online Version -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700">
+                    <i class="fa-solid fa-globe text-5xl text-blue-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">Онлайн версия</h3>
+                    <p class="text-slate-400 mb-6">Работает прямо в браузере без установки</p>
+                    <button onclick="startOnline()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg font-semibold transition">
+                        Запустить
+                    </button>
+                </div>
+                
+                <!-- Download Files -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700">
+                    <i class="fa-solid fa-file-zipper text-5xl text-green-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">HTML файлы</h3>
+                    <p class="text-slate-400 mb-6">Скачайте и откройте локально на компьютере</p>
+                    <button onclick="downloadFiles()" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 rounded-lg font-semibold transition">
+                        Скачать ZIP
+                    </button>
+                </div>
+                
+                <!-- Windows EXE -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-slate-700">
+                    <i class="fa-brands fa-windows text-5xl text-cyan-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">Windows EXE</h3>
+                    <p class="text-slate-400 mb-6">Портативная версия для Windows</p>
+                    <button onclick="showExeInstructions()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white py-3 rounded-lg font-semibold transition">
+                        Инструкция
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-slate-800">
+        <div class="container mx-auto text-center">
+            <p class="text-slate-400">© 2024 LinkGuard v2.1. Создано с ❤️ для вашей безопасности</p>
+            <div class="flex justify-center gap-6 mt-4">
+                <a href="https://github.com" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-brands fa-github text-2xl"></i>
+                </a>
+                <a href="https://telegram.org" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-brands fa-telegram text-2xl"></i>
+                </a>
+                <a href="mailto:support@linkguard.com" class="text-slate-400 hover:text-white transition">
+                    <i class="fa-solid fa-envelope text-2xl"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Modal for EXE Instructions -->
+    <div id="exe-modal" class="fixed inset-0 bg-black/70 backdrop-blur hidden items-center justify-center z-50">
+        <div class="bg-slate-800 rounded-2xl p-8 max-w-2xl mx-4 border border-slate-700">
+            <h3 class="text-2xl font-bold mb-4">Создание EXE файла</h3>
+            <div class="bg-slate-900 rounded-lg p-4 mb-6 font-mono text-sm">
+                <p class="text-green-400 mb-2"># Установите Node.js с nodejs.org</p>
+                <p class="text-green-400 mb-2"># Затем в командной строке:</p>
+                <p class="text-white">npm install -g nativefier</p>
+                <p class="text-white">nativefier "https://linkguard.app" --name "LinkGuard" --platform windows</p>
+            </div>
+            <button onclick="closeExeModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-lg transition">
+                Закрыть
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target + (counter.nextElementSibling.textContent.includes('%') ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current);
+                    }
+                }, 20);
+            });
+        }
+        
+        // Intersection Observer for animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.target.id === 'stats') {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(document.getElementById('stats'));
+        
+        // Demo Check Function
+        function checkDemo() {
+            const input = document.getElementById('demo-input');
+            const result = document.getElementById('demo-result');
+            const url = input.value.trim();
+            
+            if (!url) return;
+            
+            result.classList.remove('hidden');
+            
+            // Simple check for demo
+            const suspicious = ['vvk.com', 'sberr.ru', 'tinkof.ru', 'gosuslugy.ru'];
+            const isSuspicious = suspicious.some(s => url.includes(s));
+            
+            if (isSuspicious) {
+                result.innerHTML = `
+                    <div class="bg-red-900/30 border border-red-500 rounded-lg p-4">
+                        <p class="text-red-400 font-bold">🚨 ФИШИНГ ОБНАРУЖЕН!</p>
+                        <p class="text-red-300 text-sm mt-1">Этот сайт пытается выдать себя за известный сервис</p>
+                    </div>
+                `;
+            } else {
+                result.innerHTML = `
+                    <div class="bg-green-900/30 border border-green-500 rounded-lg p-4">
+                        <p class="text-green-400 font-bold">✅ Ссылка безопасна</p>
+                        <p class="text-green-300 text-sm mt-1">Домен проверен и не вызывает подозрений</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Navigation Functions
+        function startOnline() {
+            window.open('index.html', '_blank');
+        }
+        
+        function downloadFiles() {
+            // Create download instructions
+            alert('Для скачивания:\n1. Сохраните эту страницу (Ctrl+S)\n2. Скачайте index.html и manager.html\n3. Откройте index.html в браузере');
+        }
+        
+        function showExeInstructions() {
+            document.getElementById('exe-modal').style.display = 'flex';
+        }
+        
+        function closeExeModal() {
+            document.getElementById('exe-modal').style.display = 'none';
+        }
+        
+        // Enter key for demo
+        document.getElementById('demo-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') checkDemo();
+        });
+    </script>
+</body>
+</html>
